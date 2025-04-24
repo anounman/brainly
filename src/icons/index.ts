@@ -1,5 +1,6 @@
 export interface IconPorops {
     size: "sm" | "md" | "lg";
+    onClick?: (e: React.MouseEvent<SVGSVGElement>) => void;
 }
 
 

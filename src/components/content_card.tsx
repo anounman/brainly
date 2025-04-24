@@ -6,22 +6,27 @@ import {
   CardFooter,
 } from "./ui/card";
 import { faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { faLink, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { CardType } from "../lib/types";
 import ShareIcon from "../icons/ShareIcon";
 import { Badge } from "./ui/badge";
 
-interface ContentCardProps {
+export interface ContentCardProps {
   title: string;
   description?: string;
   link: string;
-  tages?: string[];
+  tags?: string[];
   type: CardType;
 }
 
-export function ContentCard(props: ContentCardProps) {
+interface ContentCardComponentProps extends ContentCardProps {
+  shareAction?: () => void;
+  deleteAction?: () => void;
+}
+
+export function ContentCard(props: ContentCardComponentProps) {
   const [youtubeId, setYoutubeId] = useState<string | null>(null);
   const [tweetId, setTweetId] = useState<string | null>(null);
   const [previewLoaded, setPreviewLoaded] = useState<boolean>(false);
@@ -53,10 +58,7 @@ export function ContentCard(props: ContentCardProps) {
 
   return (
     <div>
-      <Card
-        className="md:w-96 w-full h-min overflow-auto m-3 cursor-pointer hover:shadow-lg transition-shadow duration-300"
-        onClick={handleCardClick}
-      >
+      <Card className="md:w-96 w-full h-min overflow-auto m-3 cursor-pointer hover:shadow-lg transition-shadow duration-300">
         <CardHeader className="flex justify-between items-center">
           <CardTitle>
             {props.type === CardType.Youtube && (
@@ -70,11 +72,12 @@ export function ContentCard(props: ContentCardProps) {
             )}
           </CardTitle>
           <CardTitle className="text-center">{props.title}</CardTitle>
-          <CardTitle>
-            <ShareIcon size="md" />
+          <CardTitle className="flex items-center gap-2 flex-wrap">
+            <ShareIcon size="md" onClick={props.shareAction} />
+            <FontAwesomeIcon icon={faTrash} onClick={props.deleteAction} />
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent onClick={handleCardClick}>
           {props.type === CardType.Youtube && youtubeId && (
             <div className="aspect-video">
               <iframe
@@ -129,7 +132,7 @@ export function ContentCard(props: ContentCardProps) {
               )}
             </div>
           )}
-          {props.tages?.map((tag, index) => (
+          {props.tags?.map((tag, index) => (
             <Badge className="m-2 bg-purple-300 " key={index}>
               <span className="text-purple-500">#{tag}</span>
             </Badge>

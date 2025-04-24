@@ -1,8 +1,14 @@
 import { IconPorops, iconStyleVariants } from ".";
 
 function ShareIcon(props: IconPorops) {
+  const handleClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (props.onClick) {
+      props.onClick(e);
+    }
+  };
   return (
     <svg
+      onClick={handleClick}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

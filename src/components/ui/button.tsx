@@ -6,8 +6,10 @@ export interface ButtonProps {
   text: string;
   startIcon?: ReactElement;
   endIcon?: ReactElement;
-  onclick?: () => void;
+  onClick?: (e: React.FormEvent) => void;
   newClasses?: string;
+  type?: "button" | "submit" | "reset";
+  textCLasses?: string;
 }
 
 const variantStyles = {
@@ -25,13 +27,15 @@ const sizeStyles = {
 export const Button = (props: ButtonProps) => {
   return (
     <button
+      type={`${props.type ?? "button"}`}
+      onClick={props.onClick}
       className={` ${defaultStyles} ${sizeStyles[props.size ?? "md"]} ${
         variantStyles[props.variant]
       }`}
     >
       <div className="flex justify-center items-center">
         {props.startIcon ? <div className="pr-2">{props.startIcon}</div> : null}
-        <span>{props.text}</span>
+        <span className={props.textCLasses ?? ""}>{props.text}</span>
         {props.endIcon ? <div className="pr-2">{props.endIcon}</div> : null}
       </div>
     </button>
